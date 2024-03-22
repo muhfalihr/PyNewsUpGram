@@ -1,0 +1,1 @@
+from src.app.library.logger import setup_logging
