@@ -2,23 +2,62 @@ from typing import *
 from functools import wraps
 
 from src.app.utility import Utilities
-from src.app.other import CleverScrapper
+from src.app.utility.parserer import CleverScrapper
+from src.app.service.requester import Requester
 
 class Processor:
     def __init__(self) -> None:
-        pass
+        self.cs = CleverScrapper()
+        self.req = Requester()
 
-    @staticmethod
-    def inewsPro(func):
+    def inewsPro(self, func):
         '''
         '''
-        cs = CleverScrapper()
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        async def wrapper(*args, **kwargs):
             content = func(*args, **kwargs)
             
-            raw_data = Utilities.raw(content=content, html=True)
-            datas = cs.iNewsCS(html=raw_data)
+            URLLIST, NEXTPAGE = self.cs.iNewsLL(html=await content)
 
-            return datas
+            DATAS = []
+
+            async for content, url in self.req.inews.second_requester(list_url=URLLIST, timeout=120):
+                data = self.cs.iNewsCS(html=content, url=url)
+                DATAS.append(data)
+            
+            RESULT = {
+                "datas": DATAS,
+                "nextpage": NEXTPAGE
+            }
+            return RESULT
+        return wrapper
+    
+    def kompasPro(self, func):
+        '''
+        '''
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            content = func(*args, **kwargs)
+
+            URLLIST = self.cs.kompasLL(html=await content)
+            print(URLLIST)
+            return URLLIST
+        return wrapper
+    
+    def tribunNewsPro(self, func):
+        '''
+        '''
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            content = func(*args, **kwargs)
+
+            URLLIST = self.cs.tribunNewsLL(html=await content)
+
+            DATAS = []
+
+            async for content, url in self.req.tribunnews.second_requester(list_url=URLLIST, timeout=120):
+                data = self.cs.tribunNewsCS(html=content, url=url)
+                DATAS.append(data)
+            print(DATAS)
+            return DATAS
         return wrapper

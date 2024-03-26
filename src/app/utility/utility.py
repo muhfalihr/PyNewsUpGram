@@ -4,6 +4,7 @@ import json
 import hashlib
 
 from typing import *
+from googletrans import Translator
 
 class Utilities:
     def __init__(self) -> Any:
@@ -64,3 +65,15 @@ class Utilities:
         web_name = re.match(pattern=r'https?://(www\.)?([^/]+)', string=string)
         if web_name: web_name = web_name.group(2)
         return web_name
+    
+    @staticmethod
+    def translator(**kwargs):
+        '''
+        
+        '''
+        text = kwargs.get("text")
+        dest = kwargs.get("dest", "en")
+        src = kwargs.get("src", "id")
+        translator = Translator()
+        translated = translator.translate(text=text, dest=dest, src=src).text
+        return translated

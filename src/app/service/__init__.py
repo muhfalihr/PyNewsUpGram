@@ -1,1 +1,0 @@
-from src.app.service.inews.service import iNews

@@ -40,3 +40,4 @@ class HtmlParser:
             print(e)
         finally:
             return result
+ 
