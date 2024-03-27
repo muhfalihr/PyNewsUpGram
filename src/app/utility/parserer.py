@@ -4,12 +4,16 @@ from src.app.library.libparser import HtmlParser
 # from src.app.service.requester import Requester
 from src.app.utility.utility import Utilities
 from src.app.utility.summarize import Summarize
+
 from typing import *
+from datetime import datetime
+from googletrans import Translator
 
 class CleverScrapper:
     def __init__(self) -> None:
         
         self.parser = HtmlParser()
+        self.translate = Translator()
         # self.req = Requester()
         self.next = False
     
@@ -74,8 +78,7 @@ class CleverScrapper:
             - :mod:`html` (str): response content decoded to string
         '''
         data = dict()
-        RAW_DATA = kwargs.get("html")
-        URL = kwargs.get("url")
+        RAW_DATA, URL = kwargs.get("html"), kwargs.get("url")
 
         ID = Utilities.hashTomd5(string=URL)
         SOURCE = Utilities.webName(string=URL)
@@ -130,7 +133,7 @@ class CleverScrapper:
             "content": CONTENT,
             "summary": SUMMARY,
             "description": DESC,
-            "editor": EDITOR,
+            "editor_name": EDITOR,
             "tags": TAGS
         })
         return data
@@ -146,7 +149,7 @@ class CleverScrapper:
         )
 
         URLIST = [
-            url.attr("href")
+            url.attr("href") + "?page=all"
             for url in self.parser.pyq_parser(
                 html=DIV, selector='div[class="pt10 pb10"] ul[class="lsi"]'
             ).find('li[class="ptb15"] h3[class="f16 fbo"] a').items()
@@ -157,8 +160,7 @@ class CleverScrapper:
         '''
         '''
         data = dict()
-        RAW_DATA = kwargs.get("html")
-        URL = kwargs.get("url")
+        RAW_DATA, URL = kwargs.get("html"), kwargs.get("url")
 
         ID = Utilities.hashTomd5(string=URL)
         SOURCE = Utilities.webName(string=URL)
@@ -169,5 +171,51 @@ class CleverScrapper:
         )
 
         JUDUL = self.parser.pyq_parser(html=DIV, selector='h1[id="arttitle"]').text()
-        PUBLISH_DATE = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] time').text()
-        return JUDUL, PUBLISH_DATE
+        RAW_PUB_DATE = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] time').text()
+        AUTHOR_NAME = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] div[class="f20 credit mt10"] h6 div[id="penulis"] a').text()
+        AUTHOR_LINK = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] div[class="f20 credit mt10"] h6 div[id="penulis"] a').attr("href")
+        EDITOR = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] div[class="f20 credit mt10"] h6 div[id="editor"] a').text()
+        EDITOR_LINK = self.parser.pyq_parser(html=DIV, selector='div[class="mt10"] div[class="f20 credit mt10"] h6 div[id="editor"] a').attr("href")
+        THUMBNAIL = self.parser.pyq_parser(html=DIV, selector='div[id="article_con"] div[id="artimg"] div[class="pb20 ovh"] div[class="ovh imgfull_div"] a[class="glightbox"] img').attr("src")
+        THUMBNAIL_CAPTION = self.parser.pyq_parser(html=DIV, selector='div[id="article_con"] div[id="artimg"] div[class="pb20 ovh"] div[class="arial f12 pt5 grey2"]').text()
+        
+        BODY_TEXT = self.parser.pyq_parser(html=DIV, selector='div[id="article_con"] div[class="side-article txt-article multi-fontsize"]')
+        BODY_TEXT = re.sub(r'<p class="baca">.*?</p>', '', BODY_TEXT.__str__())
+        RAW_DATA = self.parser.pyq_parser(html=BODY_TEXT, selector='p').text() if BODY_TEXT else ''
+        CONTENT = re.sub(r'^(\b[A-Z]+[\.]*[A-Z]+[\s]*-[\s]*\b|\b[A-Z]+[\.]*[A-Z]+\b[,]*\s\b[A-Z]+[\s]*-[\s]*\b|Laporan\sWartawan\sTribunnews\.com[,]*\s.+\b[A-Z]+[\.]*[A-Z]+\b[,]*\s\b[A-Z]+[\s]*-[\s]*\b)', '', RAW_DATA)
+        
+        RAW_PUB_DATE = self.translate.translate(text=RAW_PUB_DATE, src="id").text if RAW_PUB_DATE else ""
+        RAW_PUB_DATE = re.sub(r'\sWIB$', '', RAW_PUB_DATE)
+        PUBLISH_DATE = datetime.strptime(RAW_PUB_DATE, "%A, %B %d, %Y %H:%M").strftime("%Y-%m-%d %H:%M:%S") if RAW_PUB_DATE else ""
+        
+        TAGS = [
+            tag.text()
+            for tag in self.parser.pyq_parser(
+                html=DIV, selector='div[id="article_con"] div[class="side-article mb5"] div[class="mb10 f16 ln24 mb10 mt5"]'
+            ).find('h5[class="tagcloud3"] a').items()
+        ]
+        if CONTENT:
+            DESC = CONTENT[:100] + "..."
+            SUMMARY = Summarize.summarize(text=CONTENT)
+        else:
+            DESC = ""
+            SUMMARY = ""
+        
+        data.update({
+            "id": ID,
+            "link": URL,
+            "source": SOURCE,
+            "title": JUDUL,
+            "author_name": AUTHOR_NAME,
+            "author_link": AUTHOR_LINK,
+            "publish_date": PUBLISH_DATE,
+            "thumbnail": THUMBNAIL,
+            "thumbnail_caption": THUMBNAIL_CAPTION,
+            "content": CONTENT,
+            "summary": SUMMARY,
+            "description": DESC,
+            "editor_name": EDITOR,
+            "editor_link": EDITOR_LINK,
+            "tags": TAGS
+        })
+        return data

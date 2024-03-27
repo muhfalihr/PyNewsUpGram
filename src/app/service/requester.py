@@ -50,9 +50,10 @@ class NewsSite:
         kwargs.update({"headers": self.set_config()})
 
         async with ClientSession() as session:
+            await asyncio.sleep(0.3)
             async with session.get(**kwargs) as response:
-                await asyncio.sleep(1)
-                if response.status == 200: return await response.text()
+                if response.status == 200:
+                    return await response.text()
                 else: raise ClientResponseError(f"Error! status code {response.status} : {response.reason}")
 
     async def second_requester(self, **kwargs):
@@ -66,29 +67,3 @@ class NewsSite:
             
             response = await self.requester(**kwargs)
             yield response, url
-
-class iNews(NewsSite):
-    def __init__(self):
-        super().__init__("inews")
-
-class Detik(NewsSite):
-    def __init__(self):
-        super().__init__("detik")
-
-class Kompas(NewsSite):
-    def __init__(self):
-        super().__init__("kompas")
-
-class Okezone(NewsSite):
-    def __init__(self):
-        super().__init__("okezone")
-
-class TribunNews(NewsSite):
-    def __init__(self):
-        super().__init__("tribunnews")
-
-class Requester:
-    def __init__(self) -> None:
-        self.inews = iNews()
-        self.kompas = Kompas()
-        self.tribunnews = TribunNews()

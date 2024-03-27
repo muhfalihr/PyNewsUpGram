@@ -1,9 +1,11 @@
+import asyncio
+
 from typing import *
 from functools import wraps
 
 from src.app.utility import Utilities
 from src.app.utility.parserer import CleverScrapper
-from src.app.service.requester import Requester
+from src.app.service import Requester
 
 class Processor:
     def __init__(self) -> None:
@@ -56,8 +58,13 @@ class Processor:
             DATAS = []
 
             async for content, url in self.req.tribunnews.second_requester(list_url=URLLIST, timeout=120):
+                await asyncio.sleep(0.3)
                 data = self.cs.tribunNewsCS(html=content, url=url)
                 DATAS.append(data)
-            print(DATAS)
-            return DATAS
+            
+            RESULT = {
+                "datas": DATAS
+            }
+            print(kwargs)
+            return RESULT
         return wrapper
