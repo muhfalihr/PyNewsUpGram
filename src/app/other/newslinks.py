@@ -1,20 +1,18 @@
 from typing import *
 
 class NewsLinks:
-    def __init__(self) -> AnyStr:
-        self.INEWS = "https://www.inews.id/indeks/news/{date}/{page}"
-        self.KOMPAS = "https://indeks.kompas.com/?site=news&date={date}&page={page}"
-        self.TRIBUNNEWS = "https://www.tribunnews.com/index-news?date={date}&page={page}"
+    def __init__( self ) -> AnyStr:
+        self.TRIBUNNEWS: str = "https://www.tribunnews.com/index-news?date={date}&page={page}"
     
-    def newslink(self, sitename: str):
+    def newslink( self, sitename: str ) -> str|None:
         '''
+        Collection of links used.
+
+        Arguments :
+          - sitename ( str ) : Site name. Ex. :mod:`tribunnews`
         '''
-        newslink = None
+        newslink: None = None
         
-        if sitename == "inews":
-            newslink = self.INEWS
-        elif sitename == "kompas":
-            newslink = self.KOMPAS
-        elif sitename == "tribunnews":
-            newslink = self.TRIBUNNEWS
+        if sitename == "tribunnews":
+            newslink: str = self.TRIBUNNEWS
         return newslink
