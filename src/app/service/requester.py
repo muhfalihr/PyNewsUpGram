@@ -1,17 +1,16 @@
-import re
 import os
 import time
 import logging
-import aiofiles
-import asyncio
 
-# from src.app.library import setup_logging
+from src.app.library import setup_logging
 from src.app.other.newslinks import NewsLinks
 
 from requests.sessions import Session
 from faker import Faker
 from dotenv import dotenv_values
 from typing import *
+
+class ErrorRequests( Exception ): pass
 
 class NewsSite:
     def __init__( self, site_name: str ) -> Any:
@@ -54,7 +53,7 @@ class NewsSite:
 
         response = self.session.request( **kwargs )
         if ( response.status_code == 200 ): return response.content
-        else: raise Exception( f"Error! status code { response.status_code } : { response.reason }" )
+        else: raise ErrorRequests( f"Error! status code { response.status_code } : { response.reason }" )
 
     def second_requester( self, **kwargs ):
         '''
@@ -64,7 +63,6 @@ class NewsSite:
 
         for url in LISTURL:
             response_content: None = None
-            if ( "/multimedia/video/" in url ): continue
             kwargs.update( { "url": url, "headers": self.request_headers() } )
             
             while ( True ):
@@ -79,4 +77,4 @@ class NewsSite:
         kwargs.update( { "method": "GET", "timeout": 240, "url": kwargs.get("url"), "headers": self.request_headers() } )
         response = self.session.request( **kwargs )
         if ( response.status_code == 200 ): return ( response.content, response.headers, kwargs.get( "url" ) )
-        else: raise Exception( f"Error! status code { response.status_code } : { response.reason }" )
+        else: raise ErrorRequests( f"Error! status code { response.status_code } : { response.reason }" )

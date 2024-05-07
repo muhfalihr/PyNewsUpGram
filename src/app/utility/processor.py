@@ -52,8 +52,8 @@ class Processor:
         @wraps( func )
         def wrapper( *args, **kwargs ):
             response: Tuple = func( *args, **kwargs )
-            data: bytes = BytesIO(response[0])
-            content_type: str = response[1].get("Content-Type")
-            filename: str = Utilities.takeFilename(response[2])
+            data: bytes = BytesIO( response[ 0 ] )
+            content_type: str = response[ 1 ].get( "Content-Type" )
+            filename: str = Utilities.takeFilename( response[ 2 ] )
             return ( data, content_type, filename )
         return wrapper

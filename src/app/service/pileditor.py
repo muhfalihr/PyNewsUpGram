@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 class PILEditor:
     load_dotenv(dotenv_path="./.env")
     def __init__( self ) -> Image.Image:
+        
         self.config = configparser.ConfigParser()
         self.env = os.getenv( "PYNEWS_CONFIG" )
         self.image_draw = lambda im: ImageDraw.Draw( im )

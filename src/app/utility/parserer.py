@@ -28,10 +28,9 @@ class CleverScrapper:
         DIV = self.parser.pyq_parser( html=RAW_DATA, selector='div[class="main"] div[class="content"] div[class="fl w677"] div[class="bsh ovh"] div[class="p2030"]' )
 
         URLIST: List[ str ] = [
-            url.attr("href") + "?page=all"
+            url.attr( "href" ) + "?page=all"
             for url in self.parser.pyq_parser( html=DIV, selector='div[class="pt10 pb10"] ul[class="lsi"]' ).find( 'li[class="ptb15"] h3[class="f16 fbo"] a' ).items()
         ]
-        print(URLIST)
         return URLIST
     
     def tribunNewsCS( self, **kwargs ):
