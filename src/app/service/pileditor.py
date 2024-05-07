@@ -190,7 +190,11 @@ class PILEditor:
         draw = self.image_draw( im )
         x, y = ( size[ 0 ] * 0.958 ), ( size[ 1 ] * 0.896 )
         font = self.image_font_true_type( font=self.watermark_font, size=65 )
-        draw.text( ( x, y ), text=self.watermark_title, fill=self.text_color, font=font, anchor="ra", stroke_width=2, stroke_fill="black" )
+        draw.text(
+            ( x, y ), 
+            text=self.watermark_title, fill=self.text_color, 
+            font=font, anchor="ra", stroke_width=2, stroke_fill="black"
+        )
         return im
     
     def smoothing_image( self, im: Image.Image ) -> Image.Image:
@@ -219,14 +223,3 @@ class PILEditor:
         im.save(path)
 
 class Notletters( Exception ): pass
-
-# if __name__ == "__main__":
-#     with Image.open("./photo/guinea.jpg") as im:
-#         pli = PILEditor()
-#         txt = "Khayalan Selangit Guinea soal Olimpiade 2024, Timnas Indonesia U23 Siap Hancurkan Mimpi Lawan"
-#         im = pli.crop_to_square(im)
-#         im = pli.scale(im)
-#         # im = pli.rounded_rectangle( im, text=txt )
-#         im = pli.add_title(im=im, text=txt )
-#         im = pli.add_watermark( im )
-#         im = pli.saved(im=im, path="./photo/testing.jpg")

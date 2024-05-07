@@ -2,7 +2,6 @@ import os
 import time
 import logging
 
-from src.app.library import setup_logging
 from src.app.other.newslinks import NewsLinks
 
 from requests.sessions import Session
