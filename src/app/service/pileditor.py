@@ -87,7 +87,7 @@ class PILEditor:
         cropped_image = im.crop( box )
         return cropped_image
     
-    def rounded_rectangle( self, im: Image.Image, num, txtsize ) -> Image.Image:
+    def rounded_rectangle( self, im: Image.Image, num ) -> Image.Image:
         '''Create a rounded rectangle shape.
         Used for the background of the title text.
         @params
@@ -101,7 +101,6 @@ class PILEditor:
         size = im.size
         draw = self.image_draw( im )
 
-        num = ( ( num / 10.0 ) + ( ( txtsize / 1000.0 ) * num ) )
         box_calc = lambda size: ( 
             ( 
                 ( size[0] * 0.021 ), ( size[1] * ( 1.0 - num ) ) 
@@ -147,6 +146,14 @@ class PILEditor:
                     i += 1
                 lines.append(line)
         return lines, len( lines )
+    
+    def height_calc( self, num: float, txtsize: float ) -> float:
+        '''
+        '''
+        addition = 0.5 if num == 3 else 1.0 if num < 3 else 0
+        num = ( num + addition )
+        num = ( ( num / 10.0 ) + ( ( txtsize / 1000.0 ) * num ) )
+        return num
 
     def add_title( self, im: Image.Image, text: str ) -> Image.Image:
         '''Add a title to the image.
@@ -166,10 +173,10 @@ class PILEditor:
         txt_size = font.getbbox( text )
         lines, length_line = self.wrap_text( text=text, font=font, max_width=( im.width * 0.9 ) )
 
-        num = ( ( length_line / 10.0 ) + ( ( txt_size[1] / 1000.0 ) * length_line ) )
+        num = self.height_calc( length_line, txt_size[1] )
         x, y = ( size[ 0 ] * 0.042 ), ( size[ 1 ] * ( 1.0 - num + 0.021 ) )
 
-        im = self.rounded_rectangle( im, length_line, txt_size[1] )
+        im = self.rounded_rectangle( im, num )
         asc, desc = font.getmetrics()
         for line in lines:
             draw.text( ( x, y ), text=line, font=font, fill=self.text_color, anchor="la" )

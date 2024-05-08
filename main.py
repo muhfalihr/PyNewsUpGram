@@ -3,7 +3,6 @@ from src.app.utility.processor import Processor
 from src.app.service import PILEditor
 
 from datetime import datetime
-from PIL import Image
 from json import *
 
 class Main:
