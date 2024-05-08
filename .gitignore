@@ -164,3 +164,6 @@ fonts/*
 # images
 image/*
 photos/
+
+# pusher
+gitoperation
