@@ -7,8 +7,20 @@ from configparser import ConfigParser
 from typing import *
 
 def setup_logging( default_path="logging.yaml", default_level=logging.INFO, env_key="LOG_CFG", log_section=None ):
-    """
-    Setup logging configuration
+    """Setup logging configuration
+
+    @params
+        default_path: `str`
+            Default path for configuration log `logging.yaml`
+        default_level: `logging.INFO`
+        env_key: `str`
+            Default environment key `LOG_CFG`
+        log_section: `Any|None`
+    
+    @return
+        >>>     logging.config.dictConfig( config )
+        >>> else:
+        >>>     logging.basicConfig( level=default_level )
     """
     path: str = default_path
     value: str | None = os.getenv( env_key, None )

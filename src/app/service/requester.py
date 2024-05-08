@@ -21,9 +21,11 @@ class NewsSite:
         self.config: Dict[ str, str|None ] = dotenv_values( dotenv_path=self.dotenv_path )
         self.sitename = site_name
 
-    def request_headers( self ):
-        '''
-        Creation of requests headers
+    def request_headers( self ) -> dict:
+        '''Creation of requests headers
+
+        @return
+            >>> return self.headers
         '''
         self.faker: Faker = Faker()
 
@@ -39,8 +41,19 @@ class NewsSite:
         self.headers[ "User-Agent" ] = self.faker.user_agent()
         return self.headers
     
-    def requester( self, **kwargs ):
-        '''
+    def requester( self, **kwargs ) -> bytes:
+        '''Make a request to the specified url, date and page
+
+        @params
+            date: `str`
+                date in YYYY-MM-dd format
+            page: `str`
+                news page
+            url: `str`
+                news link
+        
+        @return
+            >>> response.content
         '''
         if "url" not in kwargs: (
             kwargs.update({
@@ -55,7 +68,16 @@ class NewsSite:
         else: raise ErrorRequests( f"Error! status code { response.status_code } : { response.reason }" )
 
     def second_requester( self, **kwargs ):
-        '''
+        '''Make a request to the specified url
+
+        @params
+            list_url: `List[ str ]`
+                List of URLs to be requested
+            condition: `bytes`
+                conditions used to determine that the response is correct
+        
+        @return
+            (response_content, url): `Tuple[ bytes, url ]`
         '''
         LISTURL: List[ str ] = kwargs.pop( "list_url" )
         CONDITION: bytes = kwargs.pop( "condition" ) if ( "condition" in kwargs ) else None
@@ -71,7 +93,14 @@ class NewsSite:
             yield response_content, url
     
     def request_taking_byte( self, **kwargs ):
-        '''
+        '''Make a request to the URL to retrieve content, headers, and URL
+
+        @params
+            url: `str`
+                url
+        
+        @return
+            >>> return ( response.content, response.headers, kwargs.get( "url" ) )
         '''
         kwargs.update( { "method": "GET", "timeout": 240, "url": kwargs.get("url"), "headers": self.request_headers() } )
         response = self.session.request( **kwargs )

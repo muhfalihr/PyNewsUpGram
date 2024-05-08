@@ -16,12 +16,16 @@ class CleverScrapper:
         self.next: bool = False
 
     def tribunNewsLL( self, **kwargs ):
-        '''
-        Gets the URLs from the HTML response and 
+        '''Gets the URLs from the HTML response and 
         returns a list containing values in the form of article URLs.
 
-        Arguments :
-          - :mod:`html` ( str ): response content decoded to string
+        @params
+            html: `str`
+                response content decoded to string
+        
+        @return
+            URLIST: `List[ str ]`
+                Url List
         '''
         RAW_DATA: str = kwargs.get( "html" )
         
@@ -34,12 +38,16 @@ class CleverScrapper:
         return URLIST
     
     def tribunNewsCS( self, **kwargs ):
-        '''
-        Take the necessary data.
+        '''Take the necessary data.
 
-        Arguments :
-            - :mod:`html` (str): response content decoded to string
-            - :mod:`url` (str): URL of the site from which the data will be retrieved
+        @params
+            html: `str`
+                response content decoded to string
+            url: `str`
+                URL of the site from which the data will be retrieved
+        
+        @return
+            data: `Dict[ Any ]`
         '''
         data: dict = dict()
         RAW_DATA, URL = kwargs.get( "html" ), kwargs.get( "url" )

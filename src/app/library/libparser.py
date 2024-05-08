@@ -8,12 +8,21 @@ class HtmlParser:
     Offers flexibility in choosing parsing methods based on preferences or specific needs.
     """
     @staticmethod
-    def bs4_parser( html, selector ):
+    def bs4_parser( html: str, selector: str ):
         """
         Employs the BeautifulSoup library for parsing.
         Parses the provided HTML string using the "lxml" parser.
         Applies the specified selector to extract relevant elements.
         Handles potential exceptions and returns the parsed results.
+
+        @params
+            html: `str`
+                html text
+            selector: `str`
+                selector
+        
+        @return
+            result: `Beatifulsoup`
         """
         result: None = None
         try:
@@ -25,12 +34,21 @@ class HtmlParser:
             return result
 
     @staticmethod
-    def pyq_parser( html, selector ):
+    def pyq_parser( html: str, selector: str ):
         """
         Utilizes the PyQuery library for parsing.
         Processes the HTML string using PyQuery's syntax.
         Applies the selector to select desired elements.
         Manages exceptions and returns the extracted data.
+
+        @params
+            html: `str`
+                html text
+            selector: `str`
+                selector
+        
+        @return
+            result: `PyQuery`
         """
         result: None = None
         try:

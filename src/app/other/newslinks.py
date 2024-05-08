@@ -5,11 +5,15 @@ class NewsLinks:
         self.TRIBUNNEWS: str = "https://www.tribunnews.com/index-news?date={date}&page={page}"
     
     def newslink( self, sitename: str ) -> str|None:
-        '''
-        Collection of links used.
+        '''Collection of links used.
 
-        Arguments :
-          - sitename ( str ) : Site name. Ex. :mod:`tribunnews`
+        @params
+            sitename: `str`
+                Site name. Ex. `tribunnews`
+        
+        @return
+            newslink: `str`
+                TribunNews news link
         '''
         newslink: None = None
         

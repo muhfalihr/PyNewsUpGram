@@ -12,11 +12,17 @@ class Utilities:
 
     @staticmethod
     def raw( content: str | bytes, html: bool = False ) -> Dict[ Any, Any ] | str:
-        '''
-        Convert API response to JSON.
+        '''Convert API response to JSON.
 
-        Arguments:
-          - content (required): response content (str | bytes)
+        @params
+            content: `str | bytes`
+                    response content
+            html: `bool`
+                    is it html ? (Optional). Default `False`
+
+        @return
+            raw_data: `str`
+                    raw html or dictionary response
         '''
         raw_data = None
 
@@ -30,11 +36,14 @@ class Utilities:
     
     @staticmethod
     def mkdirNotExist(name: str) -> None:
-        '''
-        Creates a folder if the folder does not already exist in the current directory.
+        '''Creates a folder if the folder does not already exist in the current directory.
 
-        Arguments:
-          - name (required): the name of the new folder to be created. (str)
+        @params
+            name: `str`
+                    the name of the new folder to be created
+        
+        @return
+            >>> return os.mkdir( path=path )
         '''
         pathdir = os.getcwd()
 
@@ -44,11 +53,14 @@ class Utilities:
     
     @staticmethod
     def hashTomd5( string: str ) -> str:
-        '''
-        Hashing the string to md5
+        '''Hashing the string to md5
 
-        Arguments :
-          - string (reqired)
+        @params
+            string: `str`
+                    text string to be hashed
+        
+        @return
+            >>> return hash_md5.hexdigest()
         '''
         hash_md5 = hashlib.md5()
         hash_md5.update( string.encode( "utf=8" ) )
@@ -56,11 +68,15 @@ class Utilities:
     
     @staticmethod
     def webName( string: str ):
-        '''
-        Retrieves the wen name from a URL string
+        '''Retrieves the wen name from a URL string
 
-        Arguments :
-          - string (required)
+        @params
+            string: `str`
+                    the url from which the web name will be retrieved
+        
+        @return
+            web_name: `Match[ str | None ]`
+                    web name
         '''
         web_name: Match[ str | None ] = re.match( pattern=r'https?://(www\.)?([^/]+)', string=string )
         if web_name: web_name: Match[ str | None ] = web_name.group( 2 )
@@ -68,11 +84,15 @@ class Utilities:
 
     @staticmethod
     def takeFilename( url: str ):
-        '''
-        Retrieves file name from url using regex.
+        '''Retrieves file name from url using regex.
 
-        Arguments :
-          - url (required)
+        @params
+            url: `str`
+                    the url from which the file name will be retrieved
+        
+        @return
+            filename: `Match[ str | None ]`
+                    file name
         '''
         pattern = re.compile( pattern=r'([^/]+)\.(jpg|mp4)$' )
         matches = pattern.search( string=url )

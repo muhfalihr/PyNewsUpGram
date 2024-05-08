@@ -16,8 +16,7 @@ class Processor:
         self.image: Image = Image
 
     def tribunNewsPro( self, func ):
-        '''
-        The processor retrieves data from the Tribunnews site URL
+        '''The processor retrieves data from the Tribunnews site URL
         '''
         @wraps( func )
         def wrapper( *args, **kwargs ):
@@ -47,7 +46,7 @@ class Processor:
         return wrapper
     
     def byteContentPhoto( self, func ):
-        '''
+        '''Retrieves Response Content, Content-Type, and Filename
         '''
         @wraps( func )
         def wrapper( *args, **kwargs ):

@@ -55,11 +55,11 @@ class PILEditor:
         This is only used for square field sizes.
         If it is anything other than square then there will be a problem in this code.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         width, height = ( self.square_px / im.width ), ( self.square_px / im.height )
@@ -68,11 +68,11 @@ class PILEditor:
     def crop_to_square( self, im: Image ) -> Image:
         '''Crop the image into a square shape.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         
         @return
-            cropped_image: :mod:`Image`
+            cropped_image: `Image`
                 obj image
         '''
         box_calc: Tuple[ float ] = lambda width, height, min_dimension, divnum: (
@@ -91,11 +91,11 @@ class PILEditor:
         '''Create a rounded rectangle shape.
         Used for the background of the title text.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         size: Tuple[ int|float, int|float ] = im.size
@@ -118,14 +118,14 @@ class PILEditor:
         This is to enable text of width more than the image width to be display
         nicely.
         @params:
-            text: :mod:`str`
+            text: `str`
                 text to wrap
-            font: :mod:`ImageFont.FreeTypeFont`
+            font: `ImageFont.FreeTypeFont`
                 font of the text
-            max_width: :mod:`int`
+            max_width: `int`
                 width to split the text with
         @return
-            lines: :mod:`list[str]`
+            lines: `list[str]`
                 list of sub-strings
         '''
         lines: list = []
@@ -158,12 +158,12 @@ class PILEditor:
     def add_title( self, im: Image, text: str ) -> Image:
         '''Add a title to the image.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
-            text: :mod:`str`
+            text: `str`
         
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         size: Tuple[ int|float, int|float ] = im.size
@@ -186,11 +186,11 @@ class PILEditor:
     def add_watermark( self, im: Image ) -> Image:
         '''Add a watermark to the image.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
 
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         size = im.size
@@ -207,11 +207,11 @@ class PILEditor:
     def smoothing_image( self, im: Image ) -> Image:
         '''Sharpens the image to be smooth and detailed.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
 
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         smooth_and_detail = im.filter( self.image_filter.SMOOTH ).filter( self.image_filter.DETAIL )
@@ -220,11 +220,11 @@ class PILEditor:
     def saved( self, im: Image, path: str ) -> Image:
         '''Save the image to an internal path.
         @params
-            im: :mod:`Image`
+            im: `Image`
                 obj image
 
         @return
-            im: :mod:`Image`
+            im: `Image`
                 obj image
         '''
         im.save( path )
