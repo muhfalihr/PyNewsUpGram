@@ -13,6 +13,5 @@ class NewsLinks:
         '''
         newslink: None = None
         
-        if sitename == "tribunnews":
-            newslink: str = self.TRIBUNNEWS
+        if ( sitename == "tribunnews" ): newslink: str = self.TRIBUNNEWS
         return newslink
