@@ -148,7 +148,13 @@ class PILEditor:
         return lines, len( lines )
     
     def _height_calc( self, num: float, txtsize: float ) -> float:
-        '''
+        '''Calculations to determine the height of a plane.
+        @params
+            num: Word count
+            txtsize: Text size
+        
+        @return
+            num: Height of a plane
         '''
         addition: float | Literal[ 0 ] = 0.5 if ( num == 3 ) else 1.0 if ( num < 3 ) else 0
         num: float = ( num + addition )
